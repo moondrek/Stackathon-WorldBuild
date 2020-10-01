@@ -29,10 +29,14 @@ export default class CreatePlayer {
       moving = true;
     }
     if (moving) {
-      socket.emit("log", "moving");
+      console.log(this.entity.body.position);
     }
     if (!moving) {
       this.entity.body.setVelocity(0, 0);
+    }
+    if (this.controls.space.isDown) {
+      this.entity.body.position.x = 0;
+      this.entity.body.position.y = 0;
     }
   }
 }

@@ -15,7 +15,6 @@ export default class MainScene extends Phaser.Scene {
   create() {
     this.add.image(0, 0, "bg");
     this.player = new CreatePlayer(this, "player");
-    console.log(this.player);
   }
 
   update() {
