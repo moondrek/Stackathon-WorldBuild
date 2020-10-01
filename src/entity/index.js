@@ -1,3 +1,4 @@
-import CreatePlayer from "./Player";
+import Player from "./Player";
+import Character from "./Character";
 
-export { CreatePlayer };
+export { Player, Character };

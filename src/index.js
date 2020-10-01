@@ -3,8 +3,8 @@ import { MainScene } from "./scene";
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 512,
+  height: 512,
   pixelArt: true,
   physics: {
     default: "arcade",
