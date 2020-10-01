@@ -17,7 +17,11 @@ export default class MainScene extends Phaser.Scene {
     socket.on("game_state", (data) => {
       for (let player in data.playerList) {
         if (player !== data.id) {
-          this.playerList[player] = new Player(this, "player");
+          this.playerList[player] = new Character(
+            this,
+            "player",
+            data.playerList[player]
+          );
         }
       }
     });

@@ -7,7 +7,6 @@ const socket = (socket) => {
 
   socket.broadcast.emit("joined", {
     id: socket.id,
-    location: { x: 0, y: 0 },
   });
 
   socket.on("disconnect", () => {
@@ -22,10 +21,12 @@ const socket = (socket) => {
     console.log(msg);
   });
   socket.on("i_move", (location) => {
+    playerList[socket.id] = location;
     socket.broadcast.emit("someone_moved", { id: socket.id, location });
   });
 
   socket.on("request_game_state", () => {
+    console.log(playerList);
     socket.emit("game_state", { playerList, id: socket.id });
   });
 };
