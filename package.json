@@ -1,9 +1,13 @@
 {
   "name": "stackathon-worldbuild",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.x"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "build-client": "webpack",
     "build-client-watch": "webpack -w",
     "deploy": "script/deploy",
