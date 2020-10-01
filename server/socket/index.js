@@ -10,6 +10,9 @@ const socket = (socket) => {
   socket.on("log", (msg) => {
     console.log(msg);
   });
+  socket.on("i_move", (location) => {
+    socket.broadcast.emit("someone_moved", { id: socket.id, location });
+  });
 };
 
 module.exports = socket;

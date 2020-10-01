@@ -29,7 +29,7 @@ export default class CreatePlayer {
       moving = true;
     }
     if (moving) {
-      console.log(this.entity.body.position);
+      socket.emit("i_move", this.entity.body.position);
     }
     if (!moving) {
       this.entity.body.setVelocity(0, 0);
