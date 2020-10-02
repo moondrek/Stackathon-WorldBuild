@@ -32,8 +32,7 @@ export default class Player extends Character {
       this.entity.body.setVelocity(0, 0);
     }
     if (this.controls.space.isDown) {
-      this.entity.body.position.x = 0;
-      this.entity.body.position.y = 0;
+      console.log(this.entity.body.position);
     }
   }
 }
