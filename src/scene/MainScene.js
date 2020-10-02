@@ -28,7 +28,11 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(512, 512, "bg");
+    //this.add.image(512, 512, "bg");
+    const bg = this.add.grid(0, 0, 1024, 1024, 32, 32, 0xffff00);
+    bg.showAltCells = true;
+    bg.setAltFillStyle(0x00ff00);
+    console.log(bg);
     this.player = new Player(this, "player");
 
     socket.on("joined", (data) => {
