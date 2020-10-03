@@ -27,6 +27,7 @@ const socket = (socket) => {
     socket.emit("game_state", {
       id: socket.id,
       playerList: Game.getRoommates(socket),
+      room: Game.getRoom(socket),
     });
   });
 

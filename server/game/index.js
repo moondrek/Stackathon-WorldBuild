@@ -30,6 +30,10 @@ class Game {
     socket.to(player.roomName).emit("someone_moved", player);
   }
 
+  getRoom(socket) {
+    return this.PlayerList.find(socket.id).room;
+  }
+
   changePlayerRoom(socket, dir) {
     const player = this.PlayerList.find(socket.id);
 

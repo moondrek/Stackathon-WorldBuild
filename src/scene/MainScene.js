@@ -3,12 +3,16 @@ import { Player, Character } from "../entity/";
 import socket from "../socket";
 
 export default class MainScene extends Phaser.Scene {
-  constructor(color1 = 0xffffff) {
+  constructor() {
     super({ key: "MainScene" });
     this.playerList = {};
-    this.color1 = color1;
 
+    //load all socket.ons in the constructor
+    //otherwise they get declared every room change
     socket.on("game_state", (data) => {
+      this.bg.setFillStyle(data.room.color1);
+      this.bg.setAltFillStyle(data.room.color2);
+
       for (let id in data.playerList) {
         console.log(data.playerList[id]);
         if (id == data.id) {
@@ -51,21 +55,15 @@ export default class MainScene extends Phaser.Scene {
   }
 
   preload() {
-    this.color2 = Math.floor(Math.random() * 16 ** 6);
-    this.load.image("bg", "assets/checkerboard.png");
     this.load.image("player", "assets/red_square.png");
-    console.log("preload");
-    this.physics.world.gravity.y = 0;
+
+    //flag to interrupt update loop
     this.sceneStopped = false;
-    //update display to show current gamestate
   }
 
   create() {
-    //this.add.image(512, 512, "bg");
-    /* Background */
-    const bg = this.add.grid(0, 0, 1024, 1024, 32, 32, this.color1);
-    bg.showAltCells = true;
-    bg.setAltFillStyle(this.color2);
+    /* Initialize Background */
+    this.bg = this.add.grid(0, 0, 1024, 1024, 32, 32);
 
     this.player = new Player(this, "player");
     this.player.entity.setVisible(false);
@@ -73,7 +71,7 @@ export default class MainScene extends Phaser.Scene {
     /* get current gamestate */
     socket.emit("request_game_state");
 
-    /* get and dostuff upon worldbound collisions */
+    /* change rooms upon worldbound collisions */
     this.player.entity.body.setCollideWorldBounds(true);
     this.player.entity.body.onWorldBounds = true;
     this.physics.world.on("worldbounds", (body, up, down, left, right) => {
@@ -84,14 +82,13 @@ export default class MainScene extends Phaser.Scene {
       }
 
       this.scene.stop();
-      this.sceneStopped = true;
+      this.sceneStopped = true; //flag to interrupt update loop
       socket.emit("change_room", moveTo);
     });
   }
 
   update() {
-    //this.physics.world.wrap(this.player.entity);
-    if (this.sceneStopped) return;
+    if (this.sceneStopped) return; //flag to interrupt update loop
     this.player.controlListener();
   }
 }
