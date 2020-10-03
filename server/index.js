@@ -12,6 +12,7 @@ function init() {
   });
 
   const io = socketio(server);
+
   io.on("connect", require("./socket"));
 }
 

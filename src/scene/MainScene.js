@@ -9,23 +9,20 @@ export default class MainScene extends Phaser.Scene {
     this.color1 = color1;
 
     socket.on("game_state", (data) => {
-      for (let player in data.playerList) {
-        console.log(data);
-        if (player == data.id) {
+      for (let id in data.playerList) {
+        console.log(data.playerList[id]);
+        if (id == data.id) {
           // set my location
           this.player.entity.setVisible(true);
           this.player.entity.setPosition(
-            data.playerList[player].location.x,
-            data.playerList[player].location.y
+            data.playerList[id].position.x,
+            data.playerList[id].position.y
           );
-        } else if (
-          data.playerList[player].room.x === data.room.x &&
-          data.playerList[player].room.y === data.room.y
-        ) {
-          this.playerList[player] = new Character( // render other player
+        } else {
+          this.playerList[id] = new Character( // render other player
             this,
             "player",
-            data.playerList[player].location
+            data.playerList[id].position
           );
         }
       }
@@ -33,7 +30,7 @@ export default class MainScene extends Phaser.Scene {
 
     /* Synchronize other player actions */
     socket.on("joined", (data) => {
-      this.playerList[data.id] = new Character(this, "player", data.location);
+      this.playerList[data.id] = new Character(this, "player", data.position);
     });
     socket.on("left", (data) => {
       this.playerList[data.id].entity.destroy();
@@ -41,8 +38,8 @@ export default class MainScene extends Phaser.Scene {
     });
     socket.on("someone_moved", (data) => {
       this.playerList[data.id].entity.setPosition(
-        data.location.x,
-        data.location.y
+        data.position.x,
+        data.position.y
       );
     });
 
