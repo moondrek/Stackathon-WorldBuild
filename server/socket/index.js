@@ -35,6 +35,16 @@ const socket = (socket) => {
   socket.on("change_room", (data) => {
     Game.changePlayerRoom(socket, data);
   });
+
+  socket.on("i_moved_object", (position) => {
+    Game.changeObjectPosition(socket, position);
+  });
+  socket.on("i_grabbed_object", (position) => {
+    Game.grabObject(socket, position);
+  });
+  socket.on("i_dropped_object", () => {
+    Game.dropObject(socket);
+  });
 };
 
 module.exports = socket;

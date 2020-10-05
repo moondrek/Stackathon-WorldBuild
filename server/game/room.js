@@ -1,3 +1,5 @@
+const Object = require("./object");
+
 class RoomList {
   constructor() {
     this.list = {
@@ -21,6 +23,7 @@ class RoomList {
 
   findOrCreate(x, y) {
     let room = this.find(x, y);
+
     if (room) {
       return room;
     } else {
@@ -35,8 +38,8 @@ class Room {
     y,
     color1 = Math.floor(Math.random() * 16 ** 6),
     color2 = Math.floor(Math.random() * 16 ** 6),
-    objects = [],
-    players = {}
+    objects = {},
+    players = {} //not a reference to PlayerList objects
   ) {
     this.x = x;
     this.y = y;
@@ -44,13 +47,49 @@ class Room {
     this.color2 = color2;
     this.objects = objects;
     this.players = players;
+
+    const randomObjects = () => {
+      this.createRandomObject();
+      if (Math.random() < 0.5) {
+        randomObjects();
+      }
+    };
+
+    randomObjects();
   }
 
   get name() {
     return `${this.x}, ${this.y}`;
   }
 
+  createRandomObject() {
+    const x = Math.floor(Math.random() * 480);
+    const y = Math.floor(Math.random() * 480);
+    this.createObject("bush", x, y);
+  }
+
+  createObject(key, x, y) {
+    const obj = new Object(key, x, y);
+    this.objects[obj.id] = obj;
+    return this;
+  }
+
+  addObject(object) {
+    this.objects[object.id] = object;
+  }
+
+  removeObject(id) {
+    delete this.objects[id];
+  }
+
+  getObject(id) {
+    return this.objects[id];
+  }
+
+  /* Player methods */
+
   addPlayer(player) {
+    //copy keys to avoid circular reference
     const { id, displayName, position, holding, heldObject } = player;
     this.players[player.id] = {
       id,
@@ -63,6 +102,10 @@ class Room {
 
   removePlayer(playerId) {
     delete this.players[playerId];
+  }
+
+  getPlayer(playerId) {
+    return this.players[playerId];
   }
 }
 

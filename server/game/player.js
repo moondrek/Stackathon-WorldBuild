@@ -38,14 +38,12 @@ class Player {
     displayName = "Wanderer",
     room,
     position = { x: 100, y: 100 },
-    holding = false,
-    heldObject = {}
+    heldObject = null
   ) {
     this.id = id;
     this.displayName = displayName;
     this.room = room;
     this.position = position;
-    this.holding = holding;
     this.heldObject = heldObject;
   }
 
@@ -69,16 +67,17 @@ class Player {
   }
 
   grabObject(object) {
-    if (this.holding !== true) {
+    if (!this.heldObject && !object.isHeld) {
       this.heldObject = object;
-      this.holding = true;
+      this.heldObject.grabbed();
     }
     return this;
   }
 
   dropObject() {
-    if (this.holding === true) {
-      this.holding = false;
+    if (this.heldObject) {
+      this.heldObject.dropped();
+      this.heldObject = null;
     }
     return this;
   }
